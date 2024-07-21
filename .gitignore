@@ -1,0 +1,5 @@
+# Built plug
+*.plug.js
+
+# Local space for testing
+test_space

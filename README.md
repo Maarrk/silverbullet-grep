@@ -9,7 +9,7 @@
 Open your `PLUGS` note in SilverBullet and add this plug to the list:
 
 ```yaml
-- https://github.com/Maarrk/silverbullet-grep/releases/download/v1.0.0/silverbullet-grep.plug.js
+- https://github.com/Maarrk/silverbullet-grep/releases/latest/download/silverbullet-grep.plug.js
 ```
 
 Then run the {[Plugs: Update]} command and off you go!

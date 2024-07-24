@@ -17,5 +17,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release with core functionality
 
-[1.1.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.0.0...v1.1.0
+[1.1.0]: https://github.com/Maarrk/silverbullet-grep/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Maarrk/silverbullet-grep/releases/tag/v1.0.0

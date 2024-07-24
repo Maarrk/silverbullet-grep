@@ -1,8 +1,8 @@
 {
   "importMap": "import_map.json",
   "tasks": {
-    "build": "silverbullet plug:compile grep.plug.yaml",
-    "watch": "silverbullet plug:compile grep.plug.yaml -w"
+    "build": "silverbullet plug:compile --importmap import_map.json grep.plug.yaml",
+    "watch": "silverbullet plug:compile --importmap import_map.json grep.plug.yaml -w"
   },
   "lint": {
     "rules": {

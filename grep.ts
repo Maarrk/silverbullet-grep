@@ -1,6 +1,6 @@
 import { editor, shell } from "$sb/syscalls.ts";
 
-const VERSION = "0.3.0";
+const VERSION = "1.0.0";
 
 const resultPage = "GREP RESULT";
 
@@ -29,6 +29,8 @@ async function grep(
     const result = await shell.run("rg", [
       "--heading", // group by file
       "--byte-offset", // location in file
+      "--type",
+      "md", // we're only interested in markdown
       literal ? "--fixed-strings" : "--regexp",
       pattern,
       folder,
@@ -55,7 +57,6 @@ async function grep(
 
   // by default ripgrep separates files by an empty line
   const fileOutputs = output.split("\n\n");
-  console.log(fileOutputs);
 
   const fileMatches = [];
   for (const fileOutput of fileOutputs) {
@@ -86,7 +87,6 @@ async function grep(
     return -(a.matches.length - b.matches.length);
   });
 
-  console.log(fileMatches);
   const text = `#meta\n\n# Search results for "${pattern}"${
     folder !== "." ? "\n**found inside folder:** " + folder + "\n" : ""
   }\n${fileMatches

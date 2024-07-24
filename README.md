@@ -67,6 +67,10 @@ Yes.
 - Flags that made it easy to create this output
 - Should be available on the same platforms as SilverBullet, since it's written in Rust like [Deno](https://deno.com)
 
+## Roadmap
+
+- Setting for smart case
+
 ## Contributing
 
 If you manage to find bugs, report them on the [issue tracker on GitHub](https://github.com/Maarrk/silverbullet-grep/issues).

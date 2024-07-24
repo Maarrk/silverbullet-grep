@@ -1,6 +1,6 @@
-name: hello
+name: grep
 functions:
-  helloWorld:
-    path: grep.ts:helloWorld
+  showVersion:
+    path: grep.ts:showVersion
     command:
-      name: "Say hello"
+      name: "Grep: version"

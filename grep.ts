@@ -1,7 +1,7 @@
 import { editor, shell } from "$sb/syscalls.ts";
 import { readSetting } from "$sb/lib/settings_page.ts";
 
-const VERSION = "1.0.0";
+const VERSION = "1.1.0";
 
 const resultPage = "GREP RESULT";
 

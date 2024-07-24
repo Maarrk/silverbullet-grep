@@ -14,3 +14,11 @@ functions:
     path: grep.ts:searchRegex
     command:
       name: "Grep: Search Regex Pattern"
+  searchTextInFolder:
+    path: grep.ts:searchTextInFolder
+    command:
+      name: "Grep: Literal Text Inside Current Folder"
+  searchRegexInFolder:
+    path: grep.ts:searchRegexInFolder
+    command:
+      name: "Grep: Regex Pattern Inside Current Folder"

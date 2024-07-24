@@ -1,6 +1,6 @@
 import { editor, shell } from "$sb/syscalls.ts";
 
-const VERSION = "0.2.0";
+const VERSION = "0.3.0";
 
 const resultPage = "GREP RESULT";
 
@@ -87,10 +87,12 @@ async function grep(
   });
 
   console.log(fileMatches);
-  const text = `#meta\n\n# Search results for "${pattern}"\n${fileMatches
+  const text = `#meta\n\n# Search results for "${pattern}"${
+    folder !== "." ? "\n**found inside folder:** " + folder + "\n" : ""
+  }\n${fileMatches
     .map(
       (fm) =>
-        `* [[${fm.page}]] ${fm.matches.length} (${
+        `* [[${fm.page}]] (${fm.matches.length} ${
           fm.matches.length > 1 ? "matches" : "match"
         }):\n` +
         fm.matches
@@ -119,6 +121,28 @@ export async function searchRegex() {
     return;
   }
   await grep(pattern, false);
+}
+
+export async function searchRegexInFolder() {
+  const pageName = await editor.getCurrentPage();
+  // Get the folder it's nested in, keeping the trailing /
+  const folderPath = pageName.slice(0, pageName.lastIndexOf("/") + 1);
+  const pattern = await editor.prompt("Regular expression pattern:", "");
+  if (!pattern) {
+    return;
+  }
+  await grep(pattern, false, folderPath !== "" ? folderPath : ".");
+}
+
+export async function searchTextInFolder() {
+  const pageName = await editor.getCurrentPage();
+  // Get the folder it's nested in, keeping the trailing /
+  const folderPath = pageName.slice(0, pageName.lastIndexOf("/") + 1);
+  const pattern = await editor.prompt("Literal text:", "");
+  if (!pattern) {
+    return;
+  }
+  await grep(pattern, false, folderPath !== "" ? folderPath : ".");
 }
 
 function normalizePath(path: string): string {

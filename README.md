@@ -55,6 +55,16 @@ You may want to set [Shortcuts](https://silverbullet.md/Shortcuts) for them.
 
 The results are written to [[GREP RESULTS]] page, which is a regular [meta page](https://silverbullet.md/Meta%20Pages), but ignored in the search.
 
+### Configuration
+
+This plug can be configured in the SETTINGS, these are the default values and their usage:
+
+```yaml
+grep:
+  # ignore case when search pattern is all lowercase
+  smartCase: true
+```
+
 ## Is it any good?
 
 Yes.
@@ -63,7 +73,7 @@ Yes.
 
 - Handles UTF-8
 - Gives the same output on all platforms
-- Better defaults (recursive search, parses `.gitignore`)
+- Better defaults (recursive search, parses `.gitignore`, multithreaded)
 - Flags that made it easy to create this output
 - Should be available on the same platforms as SilverBullet, since it's written in Rust like [Deno](https://deno.com)
 

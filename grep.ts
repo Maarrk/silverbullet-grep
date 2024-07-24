@@ -1,4 +1,5 @@
 import { editor, shell } from "$sb/syscalls.ts";
+import { readSetting } from "$sb/lib/settings_page.ts";
 
 const VERSION = "1.0.0";
 
@@ -24,6 +25,11 @@ async function grep(
   folder: string = "."
 ) {
   console.log(`grep("${pattern}", ${literal}, "${folder}")`);
+
+  let smartCase = true;
+  const config = await readSetting("grep", {});
+  if (config && config.smartCase === false) smartCase = false;
+
   let output: string;
   try {
     const result = await shell.run("rg", [
@@ -31,6 +37,7 @@ async function grep(
       "--byte-offset", // location in file
       "--type",
       "md", // we're only interested in markdown
+      smartCase ? "--smart-case" : "--case-sensitive",
       literal ? "--fixed-strings" : "--regexp",
       pattern,
       folder,

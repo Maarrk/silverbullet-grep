@@ -1,4 +1,6 @@
 name: grep
+requiredPermissions:
+  - shell
 functions:
   showVersion:
     path: grep.ts:showVersion

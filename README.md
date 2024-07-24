@@ -9,10 +9,37 @@
 Open your `PLUGS` note in SilverBullet and add this plug to the list:
 
 ```yaml
-- ghr:Maarrk/silverbullet-grep/latest
+- https://github.com/Maarrk/silverbullet-grep/releases/download/v1.0.0/silverbullet-grep.plug.js
 ```
 
 Then run the {[Plugs: Update]} command and off you go!
+
+### How do I install ripgrep in the `zefhemel/silverbullet` Docker image?
+
+The package `ripgrep` wasn't found by `apt` and there's no `curl` or `wget`.
+This is how I did it, still thinking of a nicer way
+
+```bash
+docker ps
+docker exec -it <container-id> /bin/bash
+deno
+```
+
+Then ran the following script:
+
+```js
+const res = await fetch("https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb");
+const file = await Deno.open("./ripgrep.deb", { create: true, write: true });
+await res.body.pipeTo(file.writable);
+file.close();
+```
+
+I got an error on `file.close()` but it still worked for me.
+Then with the file finally in the container, I ran:
+
+```bash
+dpkg -i ./ripgrep.deb
+```
 
 ## Usage
 

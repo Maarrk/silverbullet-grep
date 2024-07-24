@@ -5,4 +5,12 @@ functions:
   showVersion:
     path: grep.ts:showVersion
     command:
-      name: "Grep: version"
+      name: "Grep: Version"
+  searchText:
+    path: grep.ts:searchText
+    command:
+      name: "Grep: Search Literal Text"
+  searchRegex:
+    path: grep.ts:searchRegex
+    command:
+      name: "Grep: Search Regex Pattern"

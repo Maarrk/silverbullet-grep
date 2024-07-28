@@ -7,13 +7,13 @@ const resultPage = "GREP RESULT";
 
 export async function showVersion() {
   try {
-    const { stdout } = await shell.run("rg", ["--version"]);
-    // Version info is in the first line, the rest are extensions
-    const ripgrepVersion = stdout.split("\n")[0];
-    await editor.flashNotification(`Grep Plug ${VERSION} ${ripgrepVersion}`);
+    const { stdout } = await shell.run("git", ["--version"]);
+    // Version info is in the first line
+    const gitVersion = stdout.split("\n")[0];
+    await editor.flashNotification(`Grep Plug ${VERSION} ${gitVersion}`);
   } catch {
     await editor.flashNotification(
-      "Could not run 'rg' command, make sure ripgrep is in PATH",
+      "Could not run 'git' command, make sure Git is in PATH",
       "error"
     );
   }
@@ -30,17 +30,23 @@ async function grep(
   const config = await readSetting("grep", {});
   if (config && config.smartCase === false) smartCase = false;
 
+  const caseSensitive = smartCase ? pattern.toLowerCase() !== pattern : true;
+
   let output: string;
   try {
-    const result = await shell.run("rg", [
+    const result = await shell.run("git", [
+      "grep",
       "--heading", // group by file
-      "--byte-offset", // location in file
-      "--type",
-      "md", // we're only interested in markdown
-      smartCase ? "--smart-case" : "--case-sensitive",
-      literal ? "--fixed-strings" : "--regexp",
+      "--break", // separate files with empty line
+      "--line-number",
+      "--column",
+      "--no-color", // can't use terminal color here anyway
+      "--no-index", // search like normal grep, no git-specific features
+      ...(caseSensitive ? [] : ["--ignore-case"]),
+      literal ? "--fixed-strings" : "--basic-regexp",
       pattern,
-      folder,
+      "--",
+      folder + (folder.endsWith("/") ? "" : "/") + "*.md",
     ]);
     if (result) {
       output = result.stdout;
@@ -51,7 +57,7 @@ async function grep(
   } catch (err) {
     console.error(err);
     await editor.flashNotification(
-      "Error running 'rg' command, make sure ripgrep is in PATH",
+      "Error running 'git' command, make sure Git is in PATH",
       "error"
     );
     return;
@@ -62,7 +68,7 @@ async function grep(
     return;
   }
 
-  // by default ripgrep separates files by an empty line
+  // --break separates files by an empty line
   const fileOutputs = output.split("\n\n");
 
   const fileMatches = [];
@@ -78,13 +84,16 @@ async function grep(
 
     const matches = [];
     for (const line of lines.slice(1)) {
-      const locationMatch = line.match(/^(\d)+:/);
+      const locationMatch = line.match(/^(\d)+:(\d)+:/);
       if (!locationMatch) continue;
 
       // HACK: regex kept losing the first digit
-      const location = parseInt(line.split(":")[0]);
-      const context = line.substring(location.toString().length + 1);
-      matches.push({ location, context });
+      const lineNum = parseInt(line.split(":")[0]);
+      const columnNum = parseInt(line.split(":")[1]);
+      const context = line.substring(
+        lineNum.toString().length + columnNum.toString().length + 2
+      );
+      matches.push({ lineNum, columnNum, context });
     }
     fileMatches.push({ page, matches });
   }
@@ -103,7 +112,10 @@ async function grep(
           fm.matches.length > 1 ? "matches" : "match"
         }):\n` +
         fm.matches
-          .map((m) => `  * [[${fm.page}@${m.location}]]: ${m.context}`)
+          .map(
+            (m) =>
+              `  * [[${fm.page}@L${m.lineNum}C${m.columnNum}]]: ${m.context}`
+          )
           .join("\n")
     )
     .join("\n")}

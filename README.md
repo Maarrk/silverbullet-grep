@@ -29,6 +29,9 @@ You may want to set [Shortcuts](https://silverbullet.md/Shortcuts) for them.
 
 The results are written to [[GREP RESULTS]] page, which is a regular [meta page](https://silverbullet.md/Meta%20Pages), but ignored in the search.
 
+> **note** Line number links
+> linking to specific location in page formatted as `[[Page@L12C3]]` will not work until [Support linking to and moving to line number in pages (#988)](https://github.com/silverbulletmd/silverbullet/pull/988) will be included in your SilverBullet version.
+
 ### Configuration
 
 This plug can be configured in the SETTINGS, these are the default values and their usage:
@@ -45,6 +48,7 @@ Yes.
 
 ## Roadmap
 
+- Report multiple matches per line
 - Exclude files matching the `spaceIgnore` setting
 
 ## Contributing

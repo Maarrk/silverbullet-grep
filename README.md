@@ -1,45 +1,19 @@
 # SilverBullet Grep Plug
 
-`silverbullet-grep` is a [Plug](https://silverbullet.md/Plugs) for [SilverBullet](https://silverbullet.md/) to search notes in your space using [ripgrep](https://github.com/BurntSushi/ripgrep).
+`silverbullet-grep` is a [Plug](https://silverbullet.md/Plugs) for [SilverBullet](https://silverbullet.md/) to search notes in your space using `git grep` command.
 
 ## Installation
 
-**Install ripgrep for your system**, following [ripgrep documentation](https://github.com/BurntSushi/ripgrep?tab=readme-ov-file#installation)
+If you run SilverBullet [using Docker](https://silverbullet.md/Install/Docker), Git is already included.
+Otherwise install Git from your system's package manager, or following [Git documentation](https://git-scm.com/).
 
 Open your `PLUGS` note in SilverBullet and add this plug to the list:
 
 ```yaml
-- https://github.com/Maarrk/silverbullet-grep/releases/latest/download/silverbullet-grep.plug.js
+- https://github.com/Maarrk/silverbullet-grep/releases/latest/download/grep.plug.js
 ```
 
 Then run the {[Plugs: Update]} command and off you go!
-
-### How do I install ripgrep in the `zefhemel/silverbullet` Docker image?
-
-The package `ripgrep` wasn't found by `apt` and there's no `curl` or `wget`.
-This is how I did it, still thinking of a nicer way
-
-```bash
-docker ps
-docker exec -it <container-id> /bin/bash
-deno
-```
-
-Then ran the following script:
-
-```js
-const res = await fetch("https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb");
-const file = await Deno.open("./ripgrep.deb", { create: true, write: true });
-await res.body.pipeTo(file.writable);
-file.close();
-```
-
-I got an error on `file.close()` but it still worked for me.
-Then with the file finally in the container, I ran:
-
-```bash
-dpkg -i ./ripgrep.deb
-```
 
 ## Usage
 
@@ -69,17 +43,13 @@ grep:
 
 Yes.
 
-## Why ripgrep?
+## Roadmap
 
-- Handles UTF-8
-- Gives the same output on all platforms
-- Better defaults (recursive search, parses `.gitignore`, multithreaded)
-- Flags that made it easy to create this output
-- Should be available on the same platforms as SilverBullet, since it's written in Rust like [Deno](https://deno.com)
+- Exclude files matching the `spaceIgnore` setting
 
 ## Contributing
 
-If you manage to find bugs, report them on the [issue tracker on GitHub](https://github.com/Maarrk/silverbullet-grep/issues).
+If you find bugs, report them on the [issue tracker on GitHub](https://github.com/Maarrk/silverbullet-grep/issues).
 I doubt I will implement more features, Pull Requests are preferred.
 
 ### Building from source

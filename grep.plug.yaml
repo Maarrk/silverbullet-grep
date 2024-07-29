@@ -1,4 +1,4 @@
-name: silverbullet-grep
+name: grep
 requiredPermissions:
   - shell
 functions:

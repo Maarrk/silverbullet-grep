@@ -35,6 +35,8 @@ async function grep(
   let output: string;
   try {
     const result = await shell.run("git", [
+      "-c", // modify config to this command
+      "core.quotePath=false", // handle non-ASCII paths
       "grep",
       "--heading", // group by file
       "--break", // separate files with empty line

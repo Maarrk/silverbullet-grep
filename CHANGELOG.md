@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for alternation and repetition operators (Extended Regular Expression)
 - Show whether text or regex pattern was used in notification and results
 
+### Fixed
+
+- Handling of files with non-ASCII paths
+
 ## [2.0.0] - 2024-07-29
 
 ### Changed

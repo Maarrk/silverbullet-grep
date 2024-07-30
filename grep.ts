@@ -43,7 +43,7 @@ async function grep(
       "--no-color", // can't use terminal color here anyway
       "--no-index", // search like normal grep, no git-specific features
       ...(caseSensitive ? [] : ["--ignore-case"]),
-      literal ? "--fixed-strings" : "--basic-regexp",
+      literal ? "--fixed-strings" : "--extended-regexp",
       pattern,
       "--",
       folder + (folder.endsWith("/") ? "" : "/") + "*.md",

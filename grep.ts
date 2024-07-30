@@ -51,7 +51,9 @@ async function grep(
     if (result) {
       output = result.stdout;
     } else {
-      editor.flashNotification(`Pattern "${pattern}" produced no results`);
+      editor.flashNotification(
+        `${literal ? "Text" : "Pattern"} "${pattern}" produced no results`
+      );
       return;
     }
   } catch (err) {
@@ -64,7 +66,9 @@ async function grep(
   }
 
   if (!output) {
-    editor.flashNotification(`Pattern "${pattern}" produced no results`);
+    editor.flashNotification(
+      `${literal ? "Text" : "Pattern"} "${pattern}" produced no results`
+    );
     return;
   }
 
@@ -103,7 +107,9 @@ async function grep(
     return -(a.matches.length - b.matches.length);
   });
 
-  const text = `#meta\n\n# Search results for "${pattern}"${
+  const text = `#meta\n\n# Search results for ${
+    literal ? "text" : "pattern"
+  } "${pattern}"${
     folder !== "." ? "\n**found inside folder:** " + folder + "\n" : ""
   }\n${fileMatches
     .map(

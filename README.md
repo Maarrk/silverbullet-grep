@@ -55,6 +55,7 @@ Yes.
 
 - Setting to make the results page a temporary file (like the included Search plug)
 - Exclude files matching the `spaceIgnore` setting
+- Settings or commands for including meta and hidden pages
 
 ## Contributing
 

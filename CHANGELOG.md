@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Configurable marker for highlighting the matched part of line
+
 ### Changed
 
 - Configuration now uses [Space Config](https://silverbullet.md/Space%20Config) instead of only [SETTINGS](https://silverbullet.md/SETTINGS) page

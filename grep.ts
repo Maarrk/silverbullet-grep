@@ -1,5 +1,4 @@
-import { editor, shell } from "$sb/syscalls.ts";
-import { readSetting } from "$sb/lib/settings_page.ts";
+import { editor, shell, system } from "$sb/syscalls.ts";
 
 const VERSION = "2.1.0";
 
@@ -14,7 +13,7 @@ export async function showVersion() {
   } catch {
     await editor.flashNotification(
       "Could not run 'git' command, make sure Git is in PATH",
-      "error"
+      "error",
     );
   }
 }
@@ -22,12 +21,12 @@ export async function showVersion() {
 async function grep(
   pattern: string,
   literal: boolean = false,
-  folder: string = "."
+  folder: string = ".",
 ) {
   console.log(`grep("${pattern}", ${literal}, "${folder}")`);
 
   let smartCase = true;
-  const config = await readSetting("grep", {});
+  const config = await system.getSpaceConfig("grep", {});
   if (config && config.smartCase === false) smartCase = false;
 
   const caseSensitive = smartCase ? pattern.toLowerCase() !== pattern : true;
@@ -54,7 +53,7 @@ async function grep(
       output = result.stdout;
     } else {
       editor.flashNotification(
-        `${literal ? "Text" : "Pattern"} "${pattern}" produced no results`
+        `${literal ? "Text" : "Pattern"} "${pattern}" produced no results`,
       );
       return;
     }
@@ -62,14 +61,14 @@ async function grep(
     console.error(err);
     await editor.flashNotification(
       "Error running 'git' command, make sure Git is in PATH",
-      "error"
+      "error",
     );
     return;
   }
 
   if (!output) {
     editor.flashNotification(
-      `${literal ? "Text" : "Pattern"} "${pattern}" produced no results`
+      `${literal ? "Text" : "Pattern"} "${pattern}" produced no results`,
     );
     return;
   }
@@ -97,7 +96,7 @@ async function grep(
       const lineNum = parseInt(line.split(":")[0]);
       const columnNum = parseInt(line.split(":")[1]);
       const context = line.substring(
-        lineNum.toString().length + columnNum.toString().length + 2
+        lineNum.toString().length + columnNum.toString().length + 2,
       );
       matches.push({ lineNum, columnNum, context });
     }
@@ -113,20 +112,22 @@ async function grep(
     literal ? "text" : "pattern"
   } "${pattern}"${
     folder !== "." ? "\n**found inside folder:** " + folder + "\n" : ""
-  }\n${fileMatches
-    .map(
-      (fm) =>
-        `* [[${fm.page}]] (${fm.matches.length} ${
-          fm.matches.length > 1 ? "matches" : "match"
-        }):\n` +
-        fm.matches
-          .map(
-            (m) =>
-              `  * [[${fm.page}@L${m.lineNum}C${m.columnNum}]]: ${m.context}`
-          )
-          .join("\n")
-    )
-    .join("\n")}
+  }\n${
+    fileMatches
+      .map(
+        (fm) =>
+          `* [[${fm.page}]] (${fm.matches.length} ${
+            fm.matches.length > 1 ? "matches" : "match"
+          }):\n` +
+          fm.matches
+            .map(
+              (m) =>
+                `  * [[${fm.page}@L${m.lineNum}C${m.columnNum}]]: ${m.context}`,
+            )
+            .join("\n"),
+      )
+      .join("\n")
+  }
     `;
 
   await editor.navigate({ page: resultPage });

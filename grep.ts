@@ -1,6 +1,6 @@
 import { editor, shell, system } from "$sb/syscalls.ts";
 
-const VERSION = "2.1.0";
+const VERSION = "2.2.0";
 
 const resultPage = "GREP RESULT";
 

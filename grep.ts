@@ -29,6 +29,22 @@ async function grep(
   const config = await system.getSpaceConfig("grep", {});
   if (config && config.smartCase === false) smartCase = false;
 
+  let surroundLeft = ">>>";
+  let surroundRight = "<<<";
+  if (config && config.surround !== undefined) {
+    if (config.surround === false) {
+      surroundLeft = "";
+      surroundRight = "";
+    } else {
+      if (config.surround.left) {
+        surroundLeft = config.surround.left;
+      }
+      if (config.surround.right) {
+        surroundRight = config.surround.right;
+      }
+    }
+  }
+
   const caseSensitive = smartCase ? pattern.toLowerCase() !== pattern : true;
 
   let output: string;
@@ -107,7 +123,16 @@ async function grep(
       const innerMatches = context.matchAll(innerRegex);
       for (const innerMatch of innerMatches) {
         const columnNum = innerMatch.index + 1;
-        matches.push({ lineNum, columnNum, context });
+        const start = innerMatch.index;
+        const end = innerMatch.index + innerMatch[0].length;
+        const surrounded = [
+          context.substring(0, start),
+          surroundLeft,
+          context.substring(start, end),
+          surroundRight,
+          context.substring(end),
+        ].join("");
+        matches.push({ lineNum, columnNum, context: surrounded });
       }
     }
     fileMatches.push({ page, matches });

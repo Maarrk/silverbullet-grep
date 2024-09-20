@@ -108,21 +108,21 @@ async function grep(
     return -(a.matches.length - b.matches.length);
   });
 
-  const text = `#meta\n\n# Search results for ${
+  const text = `#meta\n\nSearch results for ${
     literal ? "text" : "pattern"
-  } "${pattern}"${
+  } **\`${pattern}\`**${
     folder !== "." ? "\n**found inside folder:** " + folder + "\n" : ""
   }\n${
     fileMatches
       .map(
         (fm) =>
-          `* [[${fm.page}]] (${fm.matches.length} ${
+          `\n## [[${fm.page}]] (${fm.matches.length} ${
             fm.matches.length > 1 ? "matches" : "match"
-          }):\n` +
+          })\n` +
           fm.matches
             .map(
               (m) =>
-                `  * [[${fm.page}@L${m.lineNum}C${m.columnNum}]]: ${m.context}`,
+                `* [[${fm.page}@L${m.lineNum}C${m.columnNum}|L${m.lineNum}C${m.columnNum}]]: ${m.context}`,
             )
             .join("\n"),
       )

@@ -49,7 +49,6 @@ Yes.
 ## Roadmap
 
 - Setting to make the results page a temporary file (like the included Search plug)
-- Report multiple matches per line
 - Exclude files matching the `spaceIgnore` setting
 
 ## Contributing

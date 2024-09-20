@@ -76,6 +76,12 @@ async function grep(
   // --break separates files by an empty line
   const fileOutputs = output.split("\n\n");
 
+  // git-grep doesn't count multiple matches, we'll search inside each line
+  const innerRegex = new RegExp(
+    literal ? escapeRegExp(pattern) : pattern,
+    caseSensitive ? "g" : "gi",
+  );
+
   const fileMatches = [];
   for (const fileOutput of fileOutputs) {
     const lines = fileOutput.split("\n");
@@ -94,11 +100,15 @@ async function grep(
 
       // HACK: regex kept losing the first digit
       const lineNum = parseInt(line.split(":")[0]);
-      const columnNum = parseInt(line.split(":")[1]);
       const context = line.substring(
-        lineNum.toString().length + columnNum.toString().length + 2,
+        lineNum.toString().length + line.split(":")[1].length + 2,
       );
-      matches.push({ lineNum, columnNum, context });
+
+      const innerMatches = context.matchAll(innerRegex);
+      for (const innerMatch of innerMatches) {
+        const columnNum = innerMatch.index + 1;
+        matches.push({ lineNum, columnNum, context });
+      }
     }
     fileMatches.push({ page, matches });
   }
@@ -177,4 +187,9 @@ function normalizePath(path: string): string {
   const forward = path.replaceAll("\\", "/");
   if (forward.startsWith("./")) return forward.substring(2);
   else return forward;
+}
+
+// from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#escaping
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
 }

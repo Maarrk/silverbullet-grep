@@ -1,8 +1,10 @@
-import { editor, shell, system } from "$sb/syscalls.ts";
+import { datastore, editor, shell, system } from "$sb/syscalls.ts";
+import { FileMeta } from "$sb/types.ts";
 
 const VERSION = "2.2.0";
 
-const resultPage = "GREP RESULT";
+const resultPageSaved = "GREP RESULT";
+const resultPageVirtual = "GREP RESULT 🔍";
 
 export async function showVersion() {
   try {
@@ -22,11 +24,12 @@ async function grep(
   pattern: string,
   literal: boolean = false,
   folder: string = ".",
-) {
+): Promise<string | undefined> {
   console.log(`grep("${pattern}", ${literal}, "${folder}")`);
 
-  let smartCase = true;
   const config = await system.getSpaceConfig("grep", {});
+
+  let smartCase = true;
   if (config && config.smartCase === false) smartCase = false;
 
   let surroundLeft = ">>>";
@@ -107,7 +110,8 @@ async function grep(
     const page = normalizePath(lines[0].slice(0, -3));
 
     // don't consider hits in results
-    if (page === resultPage) continue;
+    if (page === resultPageSaved) continue;
+    if (page === resultPageVirtual) continue;
 
     const matches = [];
     for (const line of lines.slice(1)) {
@@ -143,7 +147,7 @@ async function grep(
     return -(a.matches.length - b.matches.length);
   });
 
-  const text = `#meta\n\nSearch results for ${
+  const text = `Search results for ${
     literal ? "text" : "pattern"
   } **\`${pattern}\`**${
     folder !== "." ? "\n**found inside folder:** " + folder + "\n" : ""
@@ -164,18 +168,81 @@ async function grep(
       .join("\n")
   }
     `;
-
-  await editor.navigate({ page: resultPage });
-  const textLength = (await editor.getText()).length;
-  await editor.replaceRange(0, textLength, text);
+  return text;
 }
 
+async function openGrep(
+  pattern: string,
+  literal: boolean = false,
+  folder: string = ".",
+) {
+  const config = await system.getSpaceConfig("grep", {});
+
+  let saveResults = false;
+  if (config && config.saveResults === true) saveResults = true;
+
+  if (saveResults) {
+    const text = await grep(pattern, literal, folder);
+    if (text) {
+      await editor.navigate({ page: resultPageSaved });
+      const textLength = (await editor.getText()).length;
+      await editor.replaceRange(0, textLength, `#meta\n\n${text}`);
+    }
+  } else {
+    await datastore.set(["grep", "arguments"], { pattern, literal, folder });
+    await editor.navigate({ page: resultPageVirtual });
+  }
+}
+
+export async function readFileGrepResult(
+  name: string,
+): Promise<{ data: Uint8Array; meta: FileMeta }> {
+  let text = "Did not produce any results";
+  const args = await datastore.get(["grep", "arguments"]);
+  try {
+    const grepText = await grep(args.pattern, args.literal, args.folder);
+    if (grepText) text = grepText;
+  } catch {
+    text =
+      `Could not call grep implementation, make sure to only open "${resultPageVirtual}" using Grep Plug commands`;
+  }
+
+  return {
+    data: new TextEncoder().encode(text),
+    meta: {
+      name,
+      contentType: "text/markdown",
+      size: text.length,
+      created: 0,
+      lastModified: 0,
+      perm: "ro",
+    },
+  };
+}
+
+export function writeFileGrepResult(
+  name: string,
+): FileMeta {
+  // Never actually writing this
+  return getFileMetaGrepResult(name);
+}
+
+export function getFileMetaGrepResult(name: string): FileMeta {
+  return {
+    name,
+    contentType: "text/markdown",
+    size: -1,
+    created: 0,
+    lastModified: 0,
+    perm: "ro",
+  };
+}
 export async function searchText() {
   const pattern = await editor.prompt("Literal text:", "");
   if (!pattern) {
     return;
   }
-  await grep(pattern, true);
+  await openGrep(pattern, true);
 }
 
 export async function searchRegex() {
@@ -183,7 +250,7 @@ export async function searchRegex() {
   if (!pattern) {
     return;
   }
-  await grep(pattern, false);
+  await openGrep(pattern, false);
 }
 
 export async function searchRegexInFolder() {
@@ -194,7 +261,7 @@ export async function searchRegexInFolder() {
   if (!pattern) {
     return;
   }
-  await grep(pattern, false, folderPath !== "" ? folderPath : ".");
+  await openGrep(pattern, false, folderPath !== "" ? folderPath : ".");
 }
 
 export async function searchTextInFolder() {
@@ -205,7 +272,7 @@ export async function searchTextInFolder() {
   if (!pattern) {
     return;
   }
-  await grep(pattern, false, folderPath !== "" ? folderPath : ".");
+  await openGrep(pattern, false, folderPath !== "" ? folderPath : ".");
 }
 
 function normalizePath(path: string): string {

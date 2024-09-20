@@ -10,7 +10,7 @@ Otherwise install Git from your system's package manager, or following [Git docu
 Open your `PLUGS` note in SilverBullet and add this plug to the list:
 
 ```yaml
-- https://github.com/Maarrk/silverbullet-grep/releases/latest/download/grep.plug.js
+- ghr:Maarrk/silverbullet-grep
 ```
 
 Then run the {[Plugs: Update]} command and off you go!
@@ -27,16 +27,18 @@ The plug provides the following commands:
 
 You may want to set [Shortcuts](https://silverbullet.md/Shortcuts) for them.
 
-The results are written to [[GREP RESULTS]] page, which is a regular [meta page](https://silverbullet.md/Meta%20Pages), but ignored in the search.
-
 ### Configuration
 
-This plug can be configured in the SETTINGS, these are the default values and their usage:
+This plug can be configured with [Space Config](https://silverbullet.md/Space%20Config), these are the default values and their usage:
 
 ```yaml
 grep:
   # ignore case when search pattern is all lowercase
   smartCase: true
+
+  # by default shows results in a virtual page, like the built-in search
+  saveResults: false
+
   # visually distinguish >>>matched part<<< in shown context
   surround:
     left: ">>>"
@@ -53,7 +55,6 @@ Yes.
 
 ## Roadmap
 
-- Setting to make the results page a temporary file (like the included Search plug)
 - Exclude files matching the `spaceIgnore` setting
 - Settings or commands for including meta and hidden pages
 

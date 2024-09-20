@@ -22,3 +22,19 @@ functions:
     path: grep.ts:searchRegexInFolder
     command:
       name: "Grep: Regex Pattern Inside Current Folder"
+
+  readPageGrepResult:
+    path: grep.ts:readFileGrepResult
+    pageNamespace:
+      pattern: "GREP RESULT 🔍"
+      operation: readFile
+  writePageGrepResult:
+    path: grep.ts:writeFileGrepResult
+    pageNamespace:
+      pattern: "GREP RESULT 🔍"
+      operation: readFile
+  getPageMetaGrepResult:
+    path: grep.ts:getFileMetaGrepResult
+    pageNamespace:
+      pattern: "GREP RESULT 🔍"
+      operation: getFileMeta

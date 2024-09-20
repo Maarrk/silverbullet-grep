@@ -1,7 +1,7 @@
 import { datastore, editor, shell, system } from "$sb/syscalls.ts";
 import { FileMeta } from "$sb/types.ts";
 
-const VERSION = "2.2.0";
+const VERSION = "2.3.0";
 
 const resultPageSaved = "GREP RESULT";
 const resultPageVirtual = "GREP RESULT 🔍";

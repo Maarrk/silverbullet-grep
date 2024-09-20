@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [2.3.0] - 2024-09-21
+
 ### Added
 
 - Using virtual page to show results
@@ -56,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release with core functionality
 
+[2.3.0]: https://github.com/Maarrk/silverbullet-grep/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/Maarrk/silverbullet-grep/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/Maarrk/silverbullet-grep/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/Maarrk/silverbullet-grep/compare/v1.1.0...v2.0.0

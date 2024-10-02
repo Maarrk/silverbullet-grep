@@ -55,6 +55,7 @@ Yes.
 
 ## Roadmap
 
+- Lower the priority of the version command in the Command Picker
 - Exclude files matching the `spaceIgnore` setting
 - Settings or commands for including meta and hidden pages
 

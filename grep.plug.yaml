@@ -6,14 +6,17 @@ functions:
     path: grep.ts:showVersion
     command:
       name: "Grep: Version"
+      priority: -2
   searchText:
     path: grep.ts:searchText
     command:
       name: "Grep: Search Literal Text"
+      priority: 1
   searchRegex:
     path: grep.ts:searchRegex
     command:
       name: "Grep: Search Regex Pattern"
+      priority: 1
   searchTextInFolder:
     path: grep.ts:searchTextInFolder
     command:

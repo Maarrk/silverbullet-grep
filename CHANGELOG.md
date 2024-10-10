@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Adjusted command priority: version lowered, search increased
+
 ## [2.3.0] - 2024-09-21
 
 ### Added

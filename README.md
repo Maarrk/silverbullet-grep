@@ -57,6 +57,8 @@ Yes.
 
 - Exclude files matching the `spaceIgnore` setting
 - Settings or commands for including meta and hidden pages
+- Commands for searching pages by name
+  - Optionally include filename matches in the regular search based on a setting
 
 ## Contributing
 

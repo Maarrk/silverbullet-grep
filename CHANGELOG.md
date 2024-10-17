@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 - Adjusted command priority: version lowered, search increased
+- Described the [Config Schema](https://silverbullet.md/Schema#Config%20schema) for in-editor config validation
 
 ## [2.3.0] - 2024-09-21
 

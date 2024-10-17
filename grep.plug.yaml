@@ -41,3 +41,20 @@ functions:
     pageNamespace:
       pattern: "GREP RESULT 🔍"
       operation: getFileMeta
+config:
+  schema.config.properties.grep:
+    type: object
+    properties:
+      saveResults:
+        type: boolean
+      smartCase:
+        type: boolean
+      surround:
+        anyOf:
+          - const: false
+          - type: object
+            properties:
+              left:
+                type: string
+              right:
+                type: string

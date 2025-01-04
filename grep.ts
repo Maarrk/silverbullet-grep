@@ -8,15 +8,12 @@ const resultPageVirtual = "GREP RESULT 🔍";
 
 export async function showVersion() {
   try {
-    const { stdout } = await shell.run("git", ["--version"]);
+    const { stdout } = await shell.run("gituwa-byczq", ["--version"]); // FIXME: Simulate only git missing
     // Version info is in the first line
     const gitVersion = stdout.split("\n")[0];
     await editor.flashNotification(`Grep Plug ${VERSION} ${gitVersion}`);
   } catch {
-    await editor.flashNotification(
-      "Could not run 'git' command, make sure Git is in PATH",
-      "error",
-    );
+    commandError();
   }
 }
 
@@ -78,10 +75,7 @@ async function grep(
     }
   } catch (err) {
     console.error(err);
-    await editor.flashNotification(
-      "Error running 'git' command, make sure Git is in PATH",
-      "error",
-    );
+    commandError();
     return;
   }
 
@@ -284,4 +278,26 @@ function normalizePath(path: string): string {
 // from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#escaping
 function escapeRegExp(text: string): string {
   return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+}
+
+async function commandError() {
+  let commandWorked = false;
+  try {
+    // Available in most shells
+    await shell.run("echo", ['"running a simple command"']);
+    commandWorked = true;
+  } catch {}
+  try {
+    // PowerShell is a little bit special
+    // FIXME: This doesn't work either ¯\_(ツ)_/¯
+    await shell.run("Write-Output", ['"running a simple command"']);
+    commandWorked = true;
+  } catch {}
+
+  await editor.flashNotification(
+    commandWorked
+      ? "Could not run 'git' command, make sure Git is in PATH"
+      : "Cannot run any shell commands, is SB_SHELL_BACKEND set to 'off'?",
+    "error",
+  );
 }

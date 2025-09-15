@@ -1,3 +1,7 @@
+# ⚠️ Unmaintained for Silverbullet v2
+
+Consider @MrMugame's excellent [Silversearch](https://github.com/MrMugame/silversearch) instead
+
 # SilverBullet Grep Plug
 
 `silverbullet-grep` is a [Plug](https://silverbullet.md/Plugs) for [SilverBullet](https://silverbullet.md/) to search notes in your space using `git grep` command.
